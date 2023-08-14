@@ -22,5 +22,5 @@ setup(
   classifiers=classifiers,
   keywords='FastSetup', 
   packages=find_packages(),
-  install_requires=[''] 
+  install_requires=['pandas','datetime'] 
 )
