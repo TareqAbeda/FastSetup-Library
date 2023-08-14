@@ -1,1 +1,1 @@
-This is a library for a static code that get frequently used in python scripts.
+A Python library that has all the static repetitive code used in Python scripts, for easier and faster setup.
