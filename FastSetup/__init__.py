@@ -9,6 +9,7 @@ from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
 from sqlalchemy import create_engine
+import cx_Oracle
 #---------------------------------------------------------------------------------------------------------------------#
 def main_log(log_folder):
     
@@ -182,6 +183,17 @@ def get_sql_data(config):
     
     return engine        
 #---------------------------------------------------------------------------------------------------------------------#
-
-
+def oracle_connection(Config):
+    
+    dsn = cx_Oracle.makedsn(Config['host'], Config['port'], service_name = Config['data_source'])
+    connection = cx_Oracle.connect(user=Config['user_ID'], password=Config['password'], dsn=dsn)
+    print("Connected to Oracle Database")
+    
+    df = pandas.read_sql(Config['query'], con=connection)
+    print("Query Found")
+              
+    connection.close()
+    print("Connection closed.")
+    
+    return df
     
