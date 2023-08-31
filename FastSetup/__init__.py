@@ -59,7 +59,7 @@ def get_config(Config_Path, SheetName, Key, Value):
         
     # Read the config file with sheet name and making sure all keys and values are string type
     df = pandas.read_excel(Config_Path,sheet_name = SheetName) 
-    df[Key] = df[Key].astype(str)+1
+    df[Key] = df[Key].astype(str)
     df[Value] = df[Value].astype(str)
     
     #iterate through the config dataframe and initialize every Key with its value  
