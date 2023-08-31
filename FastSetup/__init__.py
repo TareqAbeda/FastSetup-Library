@@ -82,18 +82,18 @@ def SMTP(config):
     try: 
         body = config['body']
     except Exception as error:
-        print("ATTENTION: Email has no body or the implementation in the config is wrong, go back to the docs for more details number:0041.")
+       
         print("The catched error is: " + str(error))      
     try:
         cc = config['cc'].split(';')
     except Exception as error:
-        print("ATTENTION: Email has no CC recipient/s or the implementation in the config is wrong, go back to the docs for more details number:0042.")
+       
         print("The catched error is: " + str(error))
     
     try:
         attachments = config['attachments'].split(';')
     except Exception as error:
-        print("ATTENTION: Email has no attachment/s or the implementation in the config is wrong, go back to the docs for more details number:0043.")
+        
         print("The catched error is: " + str(error))
     ###################################################################################################################
     # Build the body of the Email
