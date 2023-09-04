@@ -12,7 +12,7 @@ classifiers = [
  
 setup(
   name='fastsetup',
-  version='0.2.3',
+  version='0.2.6',
   description='Static code in python scripts',
   long_description = open('README.txt').read() + '\n\n' + open('CHANGELOG.txt').read(),
   url='',  
@@ -22,5 +22,5 @@ setup(
   classifiers=classifiers,
   keywords='fastsetup', 
   packages=find_packages(),
-  install_requires=['pandas','pysftp', 'smtplib', 'logging', 'datetime'] 
+  install_requires=[] 
 )

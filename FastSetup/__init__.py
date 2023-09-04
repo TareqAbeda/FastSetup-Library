@@ -1,17 +1,8 @@
 #---------------------------------------------------------------------------------------------------------------------#
-import logging
-import datetime
-import pandas
-import smtplib
-import pysftp
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-from email.mime.base import MIMEBase
-from email import encoders
-from sqlalchemy import create_engine
-import cx_Oracle
-#---------------------------------------------------------------------------------------------------------------------#
 def main_log(log_folder):
+    import logging
+    import datetime
+    
     
     try:
         #create a log file with today's date and define its format and set the level to DEBUG
@@ -34,7 +25,8 @@ def main_log(log_folder):
     return loggerMain, loggerInit, loggerProcess
 #---------------------------------------------------------------------------------------------------------------------#
 def custom_log(log_folder, log_format, log_name):
-    
+    import logging
+    import datetime
     
     # if the log_foramt string empty the format will be set to default 
     if log_format == None:
@@ -56,6 +48,7 @@ def custom_log(log_folder, log_format, log_name):
     return customLog
 #---------------------------------------------------------------------------------------------------------------------#
 def get_config(Config_Path, SheetName, Key, Value):
+    import pandas
     
         
     # Read the config file with sheet name and making sure all keys and values are string type
@@ -71,6 +64,11 @@ def get_config(Config_Path, SheetName, Key, Value):
     return Config
 #---------------------------------------------------------------------------------------------------------------------#
 def SMTP(config):
+    from email.mime.multipart import MIMEMultipart
+    from email.mime.text import MIMEText
+    from email.mime.base import MIMEBase
+    from email import encoders
+    import smtplib
     
     # getting all the email components
     file_name = config['file_name']
@@ -82,18 +80,18 @@ def SMTP(config):
     try: 
         body = config['body']
     except Exception as error:
-       
+        print("ATTENTION: Email has no body or the implementation in the config is wrong, go back to the docs for more details number:0041.")
         print("The catched error is: " + str(error))      
     try:
         cc = config['cc'].split(';')
     except Exception as error:
-       
+        print("ATTENTION: Email has no CC recipient/s or the implementation in the config is wrong, go back to the docs for more details number:0042.")
         print("The catched error is: " + str(error))
     
     try:
         attachments = config['attachments'].split(';')
     except Exception as error:
-        
+        print("ATTENTION: Email has no attachment/s or the implementation in the config is wrong, go back to the docs for more details number:0043.")
         print("The catched error is: " + str(error))
     ###################################################################################################################
     # Build the body of the Email
@@ -131,6 +129,8 @@ def SMTP(config):
          server.sendmail(sender_email, recipients, text)
 #---------------------------------------------------------------------------------------------------------------------#
 def SFTP_download(server_folder_name, server_file_name, local_file_path,config):
+    import pysftp
+
     # to get the hostkeys for the sftp
     cnopts = pysftp.CnOpts()
     cnopts.hostkeys = None
@@ -155,7 +155,9 @@ def SFTP_download(server_folder_name, server_file_name, local_file_path,config):
         sftp.close()
 #---------------------------------------------------------------------------------------------------------------------#
 def SFTP_upload(target_location, local_file, config):
-    # to get the host keys for the sftp
+    import pysftp
+
+    # to get the hostkeys for the sftp
     cnopts = pysftp.CnOpts()
     cnopts.hostkeys = None
 
@@ -169,11 +171,11 @@ def SFTP_upload(target_location, local_file, config):
         sftp.close()
 #---------------------------------------------------------------------------------------------------------------------#
 def get_sql_data(config):
-
+    from sqlalchemy import create_engine
 
     sql_username = config['username']
     sql_password = config['password']
-    sql_servername = config['servername'] 
+    sql_servername = config['servername']
     sql_database = config['database']
     
     engine = create_engine("mssql+pyodbc://"+sql_username+
@@ -184,6 +186,8 @@ def get_sql_data(config):
     return engine        
 #---------------------------------------------------------------------------------------------------------------------#
 def oracle_connection(Config):
+    import cx_Oracle
+    import pandas
     
     dsn = cx_Oracle.makedsn(Config['host'], Config['port'], service_name = Config['data_source'])
     connection = cx_Oracle.connect(user=Config['user_ID'], password=Config['password'], dsn=dsn)
