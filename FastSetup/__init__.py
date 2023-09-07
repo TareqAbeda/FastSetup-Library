@@ -80,19 +80,21 @@ def SMTP(config):
     try: 
         body = config['body']
     except Exception as error:
-        print("ATTENTION: Email has no body or the implementation in the config is wrong, go back to the docs for more details number:0041.")
+        print("ATTENTION: Email has no body or the implementation in the config is wrong.")
         print("The catched error is: " + str(error))      
     try:
         cc = config['cc'].split(';')
     except Exception as error:
-        print("ATTENTION: Email has no CC recipient/s or the implementation in the config is wrong, go back to the docs for more details number:0042.")
+        print("ATTENTION: Email has no CC recipient/s or the implementation in the config is wrong.")
         print("The catched error is: " + str(error))
     
     try:
         attachments = config['attachments'].split(';')
     except Exception as error:
-        print("ATTENTION: Email has no attachment/s or the implementation in the config is wrong, go back to the docs for more details number:0043.")
+        print("ATTENTION: Email has no attachment/s or the implementation in the config is wrong.")
         print("The catched error is: " + str(error))
+
+    print("Config read successfully \n")
     ###################################################################################################################
     # Build the body of the Email
     message = MIMEMultipart('alternative')
@@ -105,6 +107,8 @@ def SMTP(config):
     except:
         recipients = to_email
     message.attach(MIMEText(body, body_type))
+
+    print("Email setup successfully")
     ###################################################################################################################
     # iterate through all the files and attache them with the email
     try:
@@ -123,12 +127,16 @@ def SMTP(config):
             text = message.as_string()
     except Exception as error:
         print(str(error))
+
+    print("Added attachments successfully")
     ################################################################################################################### 
     # connect to the server and send the email
     with smtplib.SMTP(config['server'], config['port']) as server:
          server.sendmail(sender_email, recipients, text)
+    
+    print("Email Sent \n")
 #---------------------------------------------------------------------------------------------------------------------#
-def SFTP_download(server_folder_name, server_file_name, local_file_path,config):
+def SFTP_download(config):
     import pysftp
 
     # to get the hostkeys for the sftp
@@ -138,23 +146,30 @@ def SFTP_download(server_folder_name, server_file_name, local_file_path,config):
     
     # SFTP connection
     with pysftp.Connection(host = config['host'], username = config['user_name'], password= config['password'] , port = int(config['SFTP_port']) , cnopts = cnopts) as sftp:
+        print("SFTP download - connection successful")
+        
         # this to enter the file location before iteration  
-        sftp.cwd(server_folder_name)
+        sftp.cwd(config['server_folder_name'])
         ##############################
         # this for loop iterate through all ziped files until it fineds the required file
         directory_structure = sftp.listdir_attr()
         for attr in directory_structure:
             attr_file_name = str(attr.filename)
-            if attr_file_name == server_file_name:
+            if attr_file_name == config['server_file_name']:
                remoteFilePath = attr_file_name
         ###############################
         # gets the required ziped file        
-        sftp.get(remoteFilePath, local_file_path)
-        
+        result =  sftp.get(remoteFilePath, config['local_file_path'])
+        print("SFTP download - downloaded file successfully")
+
         # close the connection
         sftp.close()
+
+        print("SFTP download - connection closed successful \n")
+    
+    return result
 #---------------------------------------------------------------------------------------------------------------------#
-def SFTP_upload(target_location, local_file, config):
+def SFTP_upload(config):
     import pysftp
 
     # to get the hostkeys for the sftp
@@ -163,41 +178,29 @@ def SFTP_upload(target_location, local_file, config):
 
     # SFTP connection
     with pysftp.Connection(host = config['host'], username = config['user_name'], password= config['password'] , port = int(config['SFTP_port']) , cnopts = cnopts) as sftp:
-       
-        #call sftp.put() method to upload file to server
-        sftp.put(local_file, target_location)
+        print("SFTP upload - connection successful")
         
-        # close the connection
-        sftp.close()
-#---------------------------------------------------------------------------------------------------------------------#
-def get_sql_data(config):
-    from sqlalchemy import create_engine
+        #call sftp.put() method to upload file to server
+        sftp.put(config['local_file'], config['target_location'])
+        print("SFTP upload - upload successful")
 
-    sql_username = config['username']
-    sql_password = config['password']
-    sql_servername = config['servername']
-    sql_database = config['database']
-    
-    engine = create_engine("mssql+pyodbc://"+sql_username+
-                           ":"+sql_password+
-                           "@"+sql_servername+
-                           "/"+sql_database+ "?driver=SQL+Server")
-    
-    return engine        
+        # close the connection
+        sftp.close()      
+        print("SFTP upload - connection closed successful \n")
 #---------------------------------------------------------------------------------------------------------------------#
-def oracle_connection(Config):
+def oracle_download(Config):
     import cx_Oracle
     import pandas
     
     dsn = cx_Oracle.makedsn(Config['host'], Config['port'], service_name = Config['data_source'])
     connection = cx_Oracle.connect(user=Config['user_ID'], password=Config['password'], dsn=dsn)
-    print("Connected to Oracle Database")
+    print("oracle_connection - connected to oracle database")
     
     df = pandas.read_sql(Config['query'], con=connection)
-    print("Query Found")
+    print("oracle_connection - query found")
               
     connection.close()
-    print("Connection closed.")
+    print("oracle_connection - connection closed. \n")
     
     return df
     

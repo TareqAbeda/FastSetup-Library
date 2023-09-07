@@ -1,5 +1,8 @@
 from setuptools import setup, find_packages
- 
+
+with open("README.md", "r", encoding="utf-8") as fh:
+    long_description_file = fh.read()
+
 
 classifiers = [
   'Development Status :: 1 - Planning',
@@ -12,9 +15,10 @@ classifiers = [
  
 setup(
   name='fastsetup',
-  version='0.2.6',
+  version='0.3.0',
   description='Static code in python scripts',
-  long_description = open('README.txt').read() + '\n\n' + open('CHANGELOG.txt').read(),
+  long_description = long_description_file,
+  long_description_content_type="text/markdown",
   url='',  
   author='Tareq Abeda',
   author_email='TareqAbeda@outlook.com',

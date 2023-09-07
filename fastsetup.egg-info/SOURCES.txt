@@ -1,7 +1,6 @@
-CHANGELOG.txt
 LICENSE
 MANIFEST.in
-README.txt
+README.md
 setup.py
 FastSetup/__init__.py
 fastsetup.egg-info/PKG-INFO

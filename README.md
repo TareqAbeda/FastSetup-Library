@@ -1,21 +1,3 @@
-Metadata-Version: 2.1
-Name: fastsetup
-Version: 0.3.0
-Summary: Static code in python scripts
-Home-page: 
-Author: Tareq Abeda
-Author-email: TareqAbeda@outlook.com
-License: MIT
-Keywords: fastsetup
-Classifier: Development Status :: 1 - Planning
-Classifier: Intended Audience :: Developers
-Classifier: License :: OSI Approved :: MIT License
-Classifier: Operating System :: Microsoft :: Windows :: Windows 11
-Classifier: Operating System :: Microsoft :: Windows :: Windows 10
-Classifier: Programming Language :: Python :: 3
-Description-Content-Type: text/markdown
-License-File: LICENSE
-
 # fastsetup
 
 A Python library that has all the static repetitive code used in Python scripts, for easier and faster setup.
