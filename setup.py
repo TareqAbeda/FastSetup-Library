@@ -15,7 +15,7 @@ classifiers = [
  
 setup(
   name='fastsetup',
-  version='0.3.0',
+  version='1.0.0',
   description='Static code in python scripts',
   long_description = long_description_file,
   long_description_content_type="text/markdown",
